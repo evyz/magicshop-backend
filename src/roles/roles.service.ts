@@ -19,8 +19,16 @@ export class RolesService {
     return 'Hello World!';
   }
 
+  async getRole(query){
+    return await this.roleRepository.findByPk(query)
+  }
+
   async getRoles(){ 
-    return await this.roleRepository.findAndCountAll()
+    return await this.roleRepository.findAndCountAll({
+      order: [
+        ['id', 'ASC']
+      ]
+    })
   }
 
   async createRole(dto){
@@ -66,5 +74,36 @@ export class RolesService {
     }}})
 
     return roles
+  }
+
+  async editRoleFromId(dto, query){
+    console.log(query)
+    if(!query){
+      throw new HttpException("Не указан ID", 500)
+    }
+
+    let updObj: {[k: string]: any} = {}
+
+    let checkObj = await this.roleRepository.findByPk(query)
+    if(!checkObj){
+      throw new HttpException("Неверный ID", 500)
+    }
+
+    if(dto.name){
+      updObj.name = dto.name;
+    }
+    if(dto.code){
+      updObj.code = dto.code;
+    }
+
+    let upd
+    
+    try{
+      upd =  await this.roleRepository.update(updObj, {where: {id: query}})
+    }catch(e){
+      throw new HttpException(e.original.detail, 303)
+    }
+
+    return upd
   }
 }
