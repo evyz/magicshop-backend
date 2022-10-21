@@ -2,11 +2,17 @@ import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { RoleModel } from './roles/roles.models';
+import { RolesModule } from './roles/roles.module';
+import { UserRoleModel } from './roles/user-roles.models';
 import { UserModel } from './user/user.models';
 import { UserModule } from './user/user.module';
+import { BrandModule } from './brand/brand.module';
+import { BrandModel } from './brand/brand.model';
 
 @Module({
-  imports: [UserModule, 
+  imports: [
+    // DB ------
     SequelizeModule.forRoot({
       dialect:'postgres',
       host: 'localhost',
@@ -14,9 +20,14 @@ import { UserModule } from './user/user.module';
       username: 'postgres',
       password: 'root',
       database: 'shop-backend',
-      models: [UserModel],
+      models: [UserModel, RoleModel, UserRoleModel, BrandModel],
       autoLoadModels: true
-    })
+    }),
+
+    UserModule, 
+    RolesModule,
+    BrandModule,
+    
   ],
   controllers: [AppController],
   providers: [AppService],
