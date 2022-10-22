@@ -1,5 +1,6 @@
 import {Injectable, HttpException} from '@nestjs/common'
 import { InjectModel } from '@nestjs/sequelize'
+import { type } from 'os'
 import { BrandModel } from './brand.model'
 
 @Injectable()
@@ -10,13 +11,13 @@ export class BrandService{
     ){}
 
     async getBrands(){
-        return await this.brandRepository.findAndCountAll()
+        return await this.brandRepository.findAndCountAll({where: {banned: false, repaired: false}})
     }
 
     async createBrand(dto){
-        const {name, country, website, email} = dto
+        const {name, country, website} = dto
 
-        if(!name || !country ||  !website || !email){
+        if(!name || !country ||  !website){
             throw new HttpException("Не указано одно из требуемых полей", 500)
         }
 
@@ -25,17 +26,49 @@ export class BrandService{
         return newBrand
     }
 
-    async setBrandToRepair(dto){
-        const {id,repaired} = dto
+    async setBrandToRepair(dto, query){
+        const id = query
+        const {repaired} = dto
 
         const brand = await this.brandRepository.findByPk(id)
         if(!brand){
             throw new HttpException("Неверный ID компании", 500)
         }
 
-        await brand.$set('repaired', repaired)
-        await brand.save()
+        let upd 
+        
+        try{
+            upd= await this.brandRepository.update({repaired}, {where: {id}})
+        }catch(e){
+            console.log(e)
+        }
 
-        return brand
+        return upd
+    }
+
+    async setBrandToBan(dto, query){
+        const id = query
+        let {banned} = dto
+
+        banned = typeof banned === 'boolean' ? banned : false
+
+        const brand = await this.brandRepository.findByPk(id)
+        if(!brand){
+            throw new HttpException("Неверный ID компании", 500)
+        }
+
+        let upd 
+        
+        try{
+            upd= await this.brandRepository.update({banned}, {where: {id}})
+        }catch(e){
+            console.log(e)
+        }
+
+        return upd
+    }
+
+    async getAllBrands(){
+        return await this.brandRepository.findAndCountAll()
     }
 }

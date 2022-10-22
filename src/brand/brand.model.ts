@@ -6,7 +6,7 @@ export class BrandModel extends Model<BrandModel>{
     @Column({ type: DataType.INTEGER, unique: true, autoIncrement: true , primaryKey: true})
     id: number;
 
-    @Column({ type: DataType.STRING})
+    @Column({ type: DataType.STRING, unique: true})
     name: string;
 
     @Column({ type: DataType.STRING})
@@ -18,9 +18,9 @@ export class BrandModel extends Model<BrandModel>{
     @Column({ type: DataType.STRING})
     logopath: string;
 
-    @Column({ type: DataType.BOOLEAN})
+    @Column({ type: DataType.BOOLEAN, defaultValue: false})
     banned: boolean;
 
-    @Column({ type: DataType.BOOLEAN})
+    @Column({ type: DataType.BOOLEAN,  defaultValue: true})
     repaired: boolean;
 }
