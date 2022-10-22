@@ -7,7 +7,7 @@ interface RoleAttrs{
     code: string;
 }
 
-@Table({tableName: "lzid-roles", createdAt: false, updatedAt: false})
+@Table({tableName: "lzid-roles"})
 export class RoleModel extends Model<RoleModel, RoleAttrs>{
     @Column({ type: DataType.INTEGER, unique: true, autoIncrement: true , primaryKey: true})
     id: number;

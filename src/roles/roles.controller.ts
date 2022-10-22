@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, Query, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from "@nestjs/common";
 import { RolesGuard } from "src/user/roles-auth";
 import { Roles } from "src/user/roles-auth.decorator";
 import { RoleDto } from "./dto/role-dto";
@@ -35,6 +35,13 @@ export class RolesController{
     @UseGuards(RolesGuard)
     editRole(@Body() dto: RoleDto, @Param('id') query){
         return this.roleService.editRoleFromId(dto, query)
+    }
+
+    @Delete(':id')
+    @Roles('lzid-role-tech-admin')
+    @UseGuards(RolesGuard)
+    deleteRole(@Body() dto: RoleDto, @Param('id') query){
+        return this.roleService.deleteRoleFromId(dto, query)
     }
 
 }

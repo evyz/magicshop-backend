@@ -43,7 +43,7 @@ export class RolesService {
       throw new HttpException("Данная роль уже существует", 500)
     }
     
-    const newRole = await this.roleRepository.create({...dto})
+    const newRole = await this.roleRepository.create({...dto, createdAt: new Date(), updatedAt: new Date()})
 
     return newRole;
   }
@@ -77,7 +77,6 @@ export class RolesService {
   }
 
   async editRoleFromId(dto, query){
-    console.log(query)
     if(!query){
       throw new HttpException("Не указан ID", 500)
     }
@@ -105,5 +104,26 @@ export class RolesService {
     }
 
     return upd
+  }
+
+  async deleteRoleFromId(dto,query){
+    if(!query){
+      throw new HttpException("Не указан ID", 500)
+    }
+
+    let checkObj = await this.roleRepository.findByPk(query)
+    if(!checkObj){
+      throw new HttpException("Неверный ID", 500)
+    }
+
+    let del
+    
+    try{
+      del =  await this.roleRepository.destroy({where: {id: query}})
+    }catch(e){
+      throw new HttpException(e.original.detail, 303)
+    }
+
+    return del
   }
 }
