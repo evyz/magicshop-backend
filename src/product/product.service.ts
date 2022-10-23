@@ -11,4 +11,12 @@ export class ProductService{
     async getProducts(query){
         
     }
+
+    async getProduct(query){
+        return await this.productRepository.findByPk(query)
+    }
+
+    async createProduct(body){
+        
+    }
 }
