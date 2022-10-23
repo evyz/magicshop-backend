@@ -14,6 +14,10 @@ export class BrandService{
         return await this.brandRepository.findAndCountAll({where: {banned: false, repaired: false}})
     }
 
+    async getBrand(query){
+        return await this.brandRepository.findByPk(query)
+    }
+
     async createBrand(dto){
         const {name, country, website} = dto
 

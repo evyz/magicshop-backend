@@ -9,6 +9,8 @@ import { UserModel } from './user/user.models';
 import { UserModule } from './user/user.module';
 import { BrandModule } from './brand/brand.module';
 import { BrandModel } from './brand/brand.model';
+import { ProductModel } from './product/product.model';
+import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
@@ -20,13 +22,14 @@ import { BrandModel } from './brand/brand.model';
       username: 'postgres',
       password: 'root',
       database: 'shop-backend',
-      models: [UserModel, RoleModel, UserRoleModel, BrandModel],
+      models: [UserModel, RoleModel, UserRoleModel, BrandModel, ProductModel],
       autoLoadModels: true
     }),
 
     UserModule, 
     RolesModule,
     BrandModule,
+    ProductModule
     
   ],
   controllers: [AppController],

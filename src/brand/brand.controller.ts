@@ -13,6 +13,11 @@ export class BrandController{
         return this.brandService.getBrands()
     }
 
+    @Get('id')
+    getBrand(@Param('id') query){
+        return this.brandService.getBrand(query)
+    }
+
     @Get('admin')
     @Roles("lzid-role-tech-admin")
     @UseGuards(RolesGuard)
